@@ -169,4 +169,19 @@ export class ProductService {
     }
   }
 
+  public async deleteProduct(id: string): Promise<Product> {
+    try{
+      const findProduct = await this.findProductId(id);
+      
+      findProduct.status = !findProduct.status
+
+      return await this.productRepository.save(findProduct);
+    }
+    catch (err) {
+      if(err instanceof NotFoundException)
+        throw err;
+      throw new BadRequestException('Error al actualizar el producto: ' + err);
+    }
+  }
+
 }

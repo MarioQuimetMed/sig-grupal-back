@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { AuthRoleGuard, AuthTokenGuard } from 'src/auth/guard';
 import { ProductService } from '../services';
 import { Roles } from 'src/auth/decorator';
@@ -8,7 +8,7 @@ import { IApiResponse } from 'src/common/interfaces';
 import { IPaginatedEmployees } from 'src/user/interfaces';
 import { Product } from '../entity';
 import { FormDataRequest, MemoryStoredFile } from 'nestjs-form-data';
-import { ProductCreateDto, UploadImageDto } from '../dto';
+import { ProductCreateDto, ProductUpdateDto, UploadImageDto } from '../dto';
 import { ParseOnjectIdPipe } from 'src/common/pipe';
 
 @Controller('product')
@@ -75,8 +75,32 @@ export class ProductController {
   @Roles(UserRole.ADMIN)
   @Patch(':productId')
   @HttpCode(HttpStatus.OK)
-  public async updatedProduct(){
+  public async updatedProduct(
+    @Param('productId', ParseOnjectIdPipe) productId: string,
+    @Body() updateProductDto: ProductUpdateDto
+  ):Promise<IApiResponse<Product>>{
+    const statusCode = HttpStatus.OK;
+    const product = await this.productService.updateProduct(productId, updateProductDto);
+    return {
+      statusCode,
+      data: product,
+      message: 'Producto actualizado correctamente'
+    }
+  }
 
+  @Roles(UserRole.ADMIN)
+  @Delete(":productId")
+  @HttpCode(HttpStatus.OK)
+  public async deleteProduct(
+    @Param('productId', ParseOnjectIdPipe) productId: string
+  ){
+    const statusCode = HttpStatus.OK;
+    const product = await this.productService.deleteProduct(productId);
+    return {
+      statusCode,
+      message: 'Producto eliminado correctamente',
+      data: product
+    }
   }
 }
 
