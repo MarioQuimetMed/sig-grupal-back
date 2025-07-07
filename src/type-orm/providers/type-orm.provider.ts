@@ -8,11 +8,12 @@ export const typeOrmProvider = TypeOrmModule.forRootAsync({
   inject: [ConfigService],
   useFactory: (configService: ConfigService) => ({
     type: "mongodb",
-    host: configService.get<string>("db_host"),
-    port: configService.get<number>("db_port"),
-    username: configService.get<string>("db_username"),
-    password: configService.get<string>("db_pass"),
-    database: configService.get<string>("db_name"),
+    url: configService.get<string>("db_url"),
+    // host: configService.get<string>("db_host"),
+    // port: configService.get<number>("db_port"),
+    // username: configService.get<string>("db_username"),
+    // password: configService.get<string>("db_pass"),
+    // database: configService.get<string>("db_name"),
     authSource: "admin", // MongoDB specific option
     autoLoadEntities: true, // Add this to auto-create collections
     entities: [
