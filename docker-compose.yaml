@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  sig_db:
+    image: mongo:latest
+    restart: unless-stopped
+    container_name: sig_db_container
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: erick17
+      MONGO_INITDB_DATABASE: SIGDB
+volumes:
+  mongo_data:
