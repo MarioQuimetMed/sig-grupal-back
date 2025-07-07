@@ -7,7 +7,7 @@ import { TypeOrmModule } from './type-orm/type-orm.module';
 import { AuthModule } from './auth/auth.module';
 import { FormDataModule } from './form-data/form-data.module';
 import { ProductModule } from './product/product.module';
-import { SalesModule } from './sales/sales.module';
+
 
 @Module({
   imports: [
@@ -17,8 +17,7 @@ import { SalesModule } from './sales/sales.module';
     ConfigModule, 
     UserModule,
     AuthModule,
-    ProductModule,
-    SalesModule
+    ProductModule
   ],
   controllers: [],
   providers: [],
