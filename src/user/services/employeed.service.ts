@@ -262,5 +262,23 @@ export class EmployeedService {
       throw err;
     }  
   } 
+
+  public async createClientRunApp(): Promise<void> {
+    try{
+      const admin = await this.userService.findUserByEmail("erickaricari@gmail.com");
+      if(!admin){
+        const createAdmin = this.userRepostitory.create({
+          email: "erickaricari@gmail.com",
+          name: "Erick17",
+          role: UserRole.CLIENT,
+          password: this.userService.hashPass("123456"),
+        })
+        await this.userRepostitory.save(createAdmin);
+        Logger.log(`Se creo el cliente ${createAdmin.name} para el sistema.`, 'InstanceApp');
+      } 
+    }catch (err) {
+      throw err;
+    }  
+  } 
   //#endregion
 }

@@ -10,6 +10,7 @@ import { Product } from '../entity';
 import { FormDataRequest, MemoryStoredFile } from 'nestjs-form-data';
 import { ProductCreateDto, ProductUpdateDto, UploadImageDto } from '../dto';
 import { ParseOnjectIdPipe } from 'src/common/pipe';
+import { User } from 'src/user/entity';
 
 @Controller('product')
 @UseGuards(AuthTokenGuard,AuthRoleGuard)
@@ -73,6 +74,21 @@ export class ProductController {
   }
 
   @Roles(UserRole.ADMIN)
+  @Get(':productId')
+  @HttpCode(HttpStatus.OK)
+  public async GetProduct(
+    @Param('productId', ParseOnjectIdPipe) productId: string
+  ):Promise<IApiResponse<Product>>{
+    const statusCode = HttpStatus.OK;
+    const product = await this.productService.findProductId(productId);
+    return {
+      statusCode,
+      data: product,
+      message: 'Producto actualizado correctamente'
+    }
+  }
+  
+  @Roles(UserRole.ADMIN)
   @Patch(':productId')
   @HttpCode(HttpStatus.OK)
   public async updatedProduct(
@@ -88,7 +104,7 @@ export class ProductController {
     }
   }
 
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.CLIENT)
   @Delete(":productId")
   @HttpCode(HttpStatus.OK)
   public async deleteProduct(

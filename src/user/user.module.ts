@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClientAddress, DistCapacity, User } from './entity';
 import { EmployeesController } from './controllers/employees.controller';
 import { AuthModule } from 'src/auth/auth.module';
+import { ClientController } from './controllers/client.controller';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { AuthModule } from 'src/auth/auth.module';
     EmployeedService,
     UserService
   ],
-  controllers: [EmployeesController]
+  controllers: [EmployeesController, ClientController]
 })
 export class UserModule {}

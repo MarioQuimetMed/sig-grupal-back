@@ -4,7 +4,9 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { CORS } from './constant';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule,{
+    rawBody: true, 
+  });
   const port = process.env.PORT || 3001;
 
   app.setGlobalPrefix('api');

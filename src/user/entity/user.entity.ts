@@ -42,7 +42,7 @@ export class User {
   @Column(() => DistCapacity)
   distribuitor?: DistCapacity;  
 
-  @Column(()=> ClientAddress)
+  @Column()
   client_detail?: ClientAddress;
 
 

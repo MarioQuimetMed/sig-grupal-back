@@ -27,6 +27,9 @@ import { SalesModule } from './sales/sales.module';
 export class AppModule implements OnModuleInit {
   constructor(private employeedService: EmployeedService) {} 
   async onModuleInit() {
-    await this.employeedService.createAdminRunApp();
+    await Promise.all([
+      this.employeedService.createAdminRunApp(),
+      this.employeedService.createClientRunApp()
+    ]);
   }
 }
