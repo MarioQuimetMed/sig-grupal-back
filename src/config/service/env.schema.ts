@@ -14,4 +14,9 @@ export const EnvSchema = Joi.object({
   DB_URL: Joi.string().required(),
   //STORAGE AZURE
   CONNECTION_STORAGE: Joi.string().required(),
+  //STRIPE
+  STRIPE_KEY: Joi.string().required(),
+  STRIPE_SUCCESS_URL: Joi.string().required(),
+  STRIPE_CANCEL_URL: Joi.string().required(),
+  STRIPE_WEBOOK_SECRET: Joi.string().required(),
 });

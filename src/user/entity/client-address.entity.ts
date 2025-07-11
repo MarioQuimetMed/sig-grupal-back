@@ -1,8 +1,6 @@
 import { Column, ObjectId, ObjectIdColumn } from "typeorm";
 
 export class ClientAddress {
-  @ObjectIdColumn()
-  _id: ObjectId;
 
   @Column({
     type: "point", // Para coordenadas geográficas

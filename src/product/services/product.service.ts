@@ -1,17 +1,19 @@
 import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from '../entity';
-import { MongoRepository } from 'typeorm';
+import { MongoRepository, ObjectId } from 'typeorm';
 import { AzureService } from './';
 import { IPaginatedEmployees } from 'src/user/interfaces';
 import { PaginationDto } from 'src/common/dto';
 import { ProductCreateDto, ProductUpdateDto } from '../dto';
 import { v4 as uuid } from 'uuid'; 
 import { UploadImageDto } from '../dto/upload-image.dto';
+import { ResponseFiles } from '../constant/response-files';
 
 @Injectable()
 export class ProductService {
   private readonly logger = new Logger(ProductService.name);
+  private url_azure = "https://sigimgages.blob.core.windows.net/products/";
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: MongoRepository<Product>,
@@ -68,13 +70,15 @@ export class ProductService {
 
           throw new InternalServerErrorException('Error al subir la imagen, '+ err);
         }
+        photoUrl = this.url_azure + photoUrl;
       }
       const createProduct = this.productRepository.create({
         name: createProductDto.name,
         description: createProductDto.description,
         price: createProductDto.price,
         stock: createProductDto.stock,
-        img_url: photoUrl
+        img_url: photoUrl,
+        status: true
       });
 
       return await this.productRepository.save(createProduct);

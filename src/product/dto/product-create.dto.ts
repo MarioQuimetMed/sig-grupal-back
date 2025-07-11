@@ -24,7 +24,7 @@ export class ProductCreateDto {
 
   @IsFile()
   @IsOptional()
-  @MaxFileSize(1e6)
+  @MaxFileSize(5e6)
   @HasMimeType(['image/*'])
   photo?: MemoryStoredFile;
 
