@@ -24,7 +24,7 @@ export const typeOrmProvider = TypeOrmModule.forRootAsync({
       ClientAddress,
       Product
     ],
-    synchronize: configService.get<string>("node_env") === 'development', // Set to false in production
+   synchronize: configService.get<string>("node_env") === 'development', // Set to false in production
   })
 
 })
