@@ -768,4 +768,75 @@ export class SalesService {
       );
     }
   }
+
+  /**
+   * Obtiene las órdenes realizadas por un cliente específico
+   * @param clientId ID del cliente
+   * @param paginationDto Parámetros de paginación
+   * @returns Lista paginada de órdenes del cliente
+   */
+  public async getClientOrders(
+    clientId: string,
+    { page = 1, limit = 10 }: PaginationDto,
+  ): Promise<IPaginatedEmployees<Order>> {
+    try {
+      this.logger.log(`Buscando órdenes del cliente con ID: ${clientId}`);
+
+      // Verificar que el usuario sea un cliente
+      const client = await this.userRepository.findOne({
+        where: {
+          _id: new ObjectId(clientId),
+          role: UserRole.CLIENT,
+          status: true,
+        },
+      });
+
+      if (!client) {
+        this.logger.error(`Cliente con ID ${clientId} no encontrado`);
+        throw new NotFoundException(`Cliente con ID ${clientId} no encontrado`);
+      }
+
+      // Calcular skip para paginación
+      const skip = (page - 1) * limit;
+
+      // Buscar órdenes del cliente
+      const [orders, total] = await this.orderRepository.findAndCount({
+        where: {
+          customerId: clientId,
+        },
+        order: {
+          createdAt: 'DESC', // Ordenar por fecha de creación, más recientes primero
+        },
+        skip,
+        take: limit,
+      });
+
+      this.logger.log(
+        `Se encontraron ${total} órdenes para el cliente ${clientId}`,
+      );
+
+      // Retornar la respuesta paginada
+      return {
+        body: orders,
+        meta: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+        },
+      };
+    } catch (error) {
+      this.logger.error(
+        `❌ Error al obtener órdenes del cliente: ${error.message}`,
+      );
+
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException(
+        `Error al obtener las órdenes del cliente: ${error.message}`,
+      );
+    }
+  }
 }

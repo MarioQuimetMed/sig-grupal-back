@@ -170,4 +170,33 @@ export class SalesController {
       data: order,
     };
   }
+
+  /**
+   * Endpoint para que un cliente obtenga sus propias órdenes
+   * @param req Request con información del usuario autenticado
+   * @param paginationDto Parámetros de paginación
+   * @returns Lista paginada de órdenes del cliente
+   */
+  @Get('my-orders')
+  @Roles(UserRole.CLIENT)
+  @HttpCode(HttpStatus.OK)
+  async getClientOrders(
+    @Req() req: Request,
+    @Query() paginationDto: PaginationDto,
+  ): Promise<IApiResponse<IPaginatedEmployees<Order>>> {
+    const userId = req.userId;
+
+    console.log(`Cliente solicitando sus órdenes, ID: ${userId}`);
+
+    const orders = await this.salesService.getClientOrders(
+      userId,
+      paginationDto,
+    );
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Lista de órdenes obtenida exitosamente',
+      data: orders,
+    };
+  }
 }
