@@ -97,3 +97,9 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+## Solución de problemas
+
+Si encuentras errores relacionados con índices únicos en la colección de órdenes (error E11000), consulta el documento de solución de problemas:
+
+[Solución de problemas comunes](docs/TROUBLESHOOTING.md)

@@ -1,0 +1,7 @@
+{
+  "name": "mongodb",
+  "version": "5.9.1",
+  "description": "Dependencia para scripts de mantenimiento de MongoDB",
+  "main": "index.js",
+  "private": true
+}

@@ -1,4 +1,17 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { Request } from 'express';
 import { FileSystemStoredFile, FormDataRequest } from 'nestjs-form-data';
 
@@ -14,28 +27,29 @@ import { BulkDistribuitorDto, CreateDistribuitorDto } from '../dto';
 import { ParseOnjectIdPipe } from 'src/common/pipe';
 
 @Controller('distribuitors')
-@UseGuards(AuthTokenGuard,AuthRoleGuard)
+@UseGuards(AuthTokenGuard, AuthRoleGuard)
 export class EmployeesController {
-  constructor(
-    private readonly employeedService: EmployeedService
-  ) {}
+  constructor(private readonly employeedService: EmployeedService) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
   @Roles(UserRole.ADMIN)
   public async getEmployees(
     @Query() paginationDto: PaginationDto,
-    @Req() req: Request  
+    @Req() req: Request,
   ): Promise<IApiResponse<IPaginatedEmployees<User>>> {
     const statusCode = HttpStatus.OK;
     const userId = req.userId; // Get the userId from the request object
     // Simulating a service call to get employees
-    const employees = await this.employeedService.findAllEmployeds(paginationDto,userId)
-    
+    const employees = await this.employeedService.findAllEmployeds(
+      paginationDto,
+      userId,
+    );
+
     return {
       statusCode,
       message: 'Lista de empleados obtenida exitosamente',
-      data: employees
+      data: employees,
     };
   }
 
@@ -43,15 +57,17 @@ export class EmployeesController {
   @HttpCode(HttpStatus.CREATED)
   @Roles(UserRole.ADMIN)
   public async createDistribuitor(
-    @Body() createDistribuitorDto: CreateDistribuitorDto
+    @Body() createDistribuitorDto: CreateDistribuitorDto,
   ): Promise<IApiResponse<User>> {
     const statusCode = HttpStatus.CREATED;
     // Simulating a service call to create a distribuitor
-    const distribuitor = await this.employeedService.createDistribuitor(createDistribuitorDto);
+    const distribuitor = await this.employeedService.createDistribuitor(
+      createDistribuitorDto,
+    );
     return {
       statusCode,
       message: 'Distribuidor creado exitosamente',
-      data: distribuitor
+      data: distribuitor,
     };
   }
 
@@ -62,16 +78,17 @@ export class EmployeesController {
     storage: FileSystemStoredFile,
   })
   public async bulkCreateDistribuitors(
-    @Body() bulkDistribuitorDto:BulkDistribuitorDto
-  ): Promise<IApiResponse<IResponseBulkCreateDist>>{
+    @Body() bulkDistribuitorDto: BulkDistribuitorDto,
+  ): Promise<IApiResponse<IResponseBulkCreateDist>> {
     const statusCode = HttpStatus.CREATED;
-    const bulkCreateDistribuitors = await this.employeedService.createBulkDistribuitors(bulkDistribuitorDto);
+    const bulkCreateDistribuitors =
+      await this.employeedService.createBulkDistribuitors(bulkDistribuitorDto);
 
-    return{
+    return {
       statusCode,
       message: `Se crearon ${bulkCreateDistribuitors.total} distribuidores exitosamente`,
-      data: bulkCreateDistribuitors
-    }
+      data: bulkCreateDistribuitors,
+    };
   }
 
   @Roles(UserRole.ADMIN)
@@ -79,14 +96,17 @@ export class EmployeesController {
   @HttpCode(HttpStatus.OK)
   public async updateDistribuitor(
     @Param('id', ParseOnjectIdPipe) id: string,
-    @Body() updateDistribuitorDto: CreateDistribuitorDto
+    @Body() updateDistribuitorDto: CreateDistribuitorDto,
   ): Promise<IApiResponse<User>> {
     const statusCode = HttpStatus.OK;
-    const distribuitor = await this.employeedService.updatedDistribuitor(id, updateDistribuitorDto);
+    const distribuitor = await this.employeedService.updatedDistribuitor(
+      id,
+      updateDistribuitorDto,
+    );
     return {
       statusCode,
       message: 'Distribuidor actualizado exitosamente',
-      data: distribuitor
+      data: distribuitor,
     };
   }
 
@@ -94,15 +114,14 @@ export class EmployeesController {
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   public async deleteDistribuitor(
-    @Param('id', ParseOnjectIdPipe) id: string
+    @Param('id', ParseOnjectIdPipe) id: string,
   ): Promise<IApiResponse<User>> {
     const statusCode = HttpStatus.OK;
     const distribuitor = await this.employeedService.deleteDistribuitor(id);
     return {
       statusCode,
       message: 'Distribuidor eliminado exitosamente',
-      data: distribuitor
-    }
+      data: distribuitor,
+    };
   }
-
 }
